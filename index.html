@@ -1,556 +1,942 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <style>
-      * {
-          margin: 0;
-          padding: 0;
-      }
-      .imgbox {
-          display: grid;
-          height: 100%;
-      }
-      .center-fit {
-          max-width: 100%;
-          max-height: 100vh;
-          margin: auto;
-      }
-  </style>
-</head>
-<head>
-<!--
-    Plain-Academic by Vasilios Mavroudis
-    Released under the Simplified BSD License/FreeBSD (2-clause) License.
-    https://github.com/mavroudisv/plain-academic
--->
-
-   <!-- Mobile Specific Metas
-   ================================================== -->
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-</head>
- <!-- Favicons
-	================================================== -->
-  <link rel="shortcut icon" href="favicon.png" >
-   
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-  <link rel="stylesheet" href="/path/to/folder/css/academicons.min.css"/>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
-  <script type="text/x-mathjax-config">
-    MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
-  </script>
-  <script type="text/javascript"
-    src="http://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-  </script>
-
-  <title>Sayan Biswas</title>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-  <link href='https://fonts.googleapis.com/css?family=Oswald:700' rel='stylesheet' type='text/css'>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sayan Biswas</title>
+  <link rel="shortcut icon" href="favicon.png">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+
+  <!-- MathJax -->
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  <style>
+    :root {
+      --sidebar-w: 268px;
+      --accent:       #2563eb;
+      --accent-light: #eff6ff;
+      --text:         #111827;
+      --text-muted:   #6b7280;
+      --bg:           #ffffff;
+      --bg-sidebar:   #f8fafc;
+      --border:       #e5e7eb;
+      --border-light: #f3f4f6;
+      --spot-bg: #fef9c3; --spot-fg: #713f12;
+      --oral-bg: #dcfce7; --oral-fg: #14532d;
+      --award-bg:#fee2e2; --award-fg: #7f1d1d;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-size: 15px;
+      line-height: 1.7;
+      color: var(--text);
+      background: var(--bg);
+    }
+
+    /* ────────────── Layout ────────────── */
+    .layout { display: flex; min-height: 100vh; }
+
+    /* ────────────── Sidebar ────────────── */
+    .sidebar {
+      width: var(--sidebar-w);
+      flex-shrink: 0;
+      position: fixed;
+      top: 0; left: 0;
+      height: 100vh;
+      overflow-y: auto;
+      background: var(--bg-sidebar);
+      border-right: 1px solid var(--border);
+      padding: 2rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    .sidebar::-webkit-scrollbar { width: 4px; }
+    .sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+    .profile { text-align: center; }
+    .profile-photo {
+      width: 128px;
+      height: 128px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--border);
+      margin-bottom: 0.75rem;
+    }
+    .profile-name {
+      font-size: 1.0625rem;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.3;
+    }
+    .profile-role {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 0.3rem;
+      line-height: 1.5;
+    }
+
+    .sidebar-divider { border: none; border-top: 1px solid var(--border); }
+
+    /* Nav */
+    .sidebar-nav { display: flex; flex-direction: column; gap: 0.1rem; }
+    .sidebar-nav a {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.4rem 0.6rem;
+      border-radius: 6px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: background 0.15s, color 0.15s;
+    }
+    .sidebar-nav a i { width: 14px; font-size: 0.78rem; flex-shrink: 0; }
+    .sidebar-nav a:hover,
+    .sidebar-nav a.active {
+      background: var(--accent-light);
+      color: var(--accent);
+    }
+
+    /* Contact */
+    .contact-block { display: flex; flex-direction: column; gap: 0.6rem; }
+    .contact-item { display: flex; align-items: flex-start; gap: 0.5rem; font-size: 0.8rem; color: var(--text-muted); }
+    .contact-item .ci-icon { color: var(--accent); width: 13px; margin-top: 3px; flex-shrink: 0; font-size: 0.72rem; }
+    .contact-item a { color: inherit; text-decoration: none; }
+    .contact-item a:hover { color: var(--accent); }
+
+    /* Social links */
+    .social-links { display: flex; flex-direction: column; gap: 0.15rem; }
+    .social-link {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.35rem 0.6rem;
+      border-radius: 6px;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: background 0.15s, color 0.15s;
+    }
+    .social-link:hover { background: var(--accent-light); color: var(--accent); }
+    .social-link i { width: 16px; font-size: 0.9rem; color: var(--accent); flex-shrink: 0; text-align: center; }
+
+    /* ────────────── Main ────────────── */
+    .main {
+      margin-left: var(--sidebar-w);
+      flex: 1;
+      padding: 3.5rem 4rem 5rem;
+    }
+    /* no max-width — content fills the available space */
+
+    /* ────────────── Sections ────────────── */
+    .section { margin-bottom: 3.5rem; }
+    .section-title {
+      font-size: 0.6875rem;
+      font-weight: 700;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--border);
+    }
+
+    /* ────────────── About ────────────── */
+    .about-content p { margin-bottom: 0.9rem; }
+    .about-content a { color: var(--accent); text-decoration: none; font-weight: 500; }
+    .about-content a:hover { text-decoration: underline; }
+    .about-content ul { padding-left: 1.25rem; margin-top: 0.4rem; }
+    .about-content ul li { margin-bottom: 0.3rem; }
+
+    /* ────────────── Publications ────────────── */
+    .pub-category { margin-bottom: 2.5rem; }
+    .pub-category-label {
+      font-size: 0.6875rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.75rem;
+    }
+    .pub-list { display: flex; flex-direction: column; }
+    .pub-item { padding: 0.9rem 0; border-bottom: 1px solid var(--border-light); }
+    .pub-item:first-child { padding-top: 0; }
+    .pub-item:last-child { border-bottom: none; }
+    .pub-year { font-size: 0.72rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.15rem; letter-spacing: 0.02em; }
+    .pub-title { font-weight: 600; font-size: 0.9375rem; color: var(--text); line-height: 1.45; }
+    .pub-authors { font-size: 0.8125rem; color: var(--text-muted); margin-top: 0.2rem; }
+    .pub-authors .me { color: var(--text); font-weight: 600; }
+    .pub-venue { font-size: 0.8125rem; color: var(--text-muted); margin-top: 0.2rem; font-style: italic; }
+    .pub-venue a { color: inherit; text-decoration: underline; text-decoration-color: var(--border); }
+    .pub-venue a:hover { color: var(--accent); text-decoration-color: var(--accent); }
+    .pub-footer { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.55rem; }
+
+    /* Badges */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.2rem;
+      font-size: 0.6875rem;
+      font-weight: 700;
+      padding: 0.175rem 0.45rem;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+    .badge-spotlight { background: var(--spot-bg); color: var(--spot-fg); }
+    .badge-oral      { background: var(--oral-bg); color: var(--oral-fg); }
+    .badge-award     { background: var(--award-bg); color: var(--award-fg); }
+
+    /* Pub links */
+    .pub-links { display: flex; gap: 0.875rem; flex-wrap: wrap; }
+    .pub-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--accent);
+      text-decoration: none;
+    }
+    .pub-link:hover { text-decoration: underline; }
+    .pub-link i { font-size: 0.75rem; }
+
+    /* ────────────── News ────────────── */
+    .news-list { display: flex; flex-direction: column; }
+    .news-item { display: flex; gap: 1.125rem; padding: 0.8rem 0; border-bottom: 1px solid var(--border-light); }
+    .news-item:last-child { border-bottom: none; }
+    .news-date { font-size: 0.75rem; font-weight: 700; color: var(--accent); min-width: 46px; padding-top: 2px; flex-shrink: 0; }
+    .news-body { font-size: 0.875rem; line-height: 1.65; color: var(--text); }
+    .news-body a { color: var(--accent); text-decoration: none; font-weight: 500; }
+    .news-body a:hover { text-decoration: underline; }
+    .news-photo {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      margin-top: 0.2rem;
+      font-style: italic;
+    }
+    .news-photo:hover { color: var(--accent); }
+
+    /* ────────────── Mobile Header ────────────── */
+    .mobile-header {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 56px;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      padding: 0 1.125rem;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 200;
+    }
+    .mobile-header-left { display: flex; align-items: center; gap: 0.625rem; }
+    .mobile-header-photo {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--border);
+      flex-shrink: 0;
+    }
+    .mobile-header-name { font-weight: 700; font-size: 0.9375rem; }
+    .mobile-menu-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0.25rem 0.4rem;
+      color: var(--text);
+      font-size: 1.1rem;
+    }
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 56px; left: 0; right: 0;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      padding: 0.625rem 1.125rem;
+      z-index: 199;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.07);
+    }
+    .mobile-menu.open { display: block; }
+    .mobile-menu a {
+      display: block;
+      padding: 0.6rem 0.375rem;
+      color: var(--text);
+      text-decoration: none;
+      font-size: 0.9375rem;
+      font-weight: 500;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .mobile-menu a:last-child { border-bottom: none; }
+
+    /* ────────────── Responsive ────────────── */
+    @media (max-width: 820px) {
+      .sidebar { display: none; }
+      .mobile-header { display: flex; }
+      .main { margin-left: 0; padding: 4.75rem 1.375rem 3rem; }
+    }
+    @media (max-width: 480px) {
+      .main { padding: 4.5rem 1rem 2.5rem; }
+      .pub-footer { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
 </head>
 
 <body>
-<nav class="navbar navbar-inverse navbar-static-top" role="navigation" >
-  <div class="container">
-  <div class="navbar-header">
-    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
+
+<!-- ── Mobile header ── -->
+<header class="mobile-header">
+  <div class="mobile-header-left">
+    <img class="mobile-header-photo" src="images/SayanBiswas_tea.jpeg" alt="Sayan Biswas">
+    <span class="mobile-header-name">Sayan Biswas</span>
   </div>
+  <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle navigation">
+    <i class="fas fa-bars"></i>
+  </button>
+</header>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#aboutme"     onclick="closeMobileMenu()">About Me</a>
+  <a href="#publications" onclick="closeMobileMenu()">Publications</a>
+  <a href="#news"        onclick="closeMobileMenu()">News &amp; Updates</a>
+  <a href="images/cv.pdf" target="_blank" rel="noopener noreferrer">CV</a>
+</div>
 
-  <!-- Collect the nav links, forms, and other content for toggling -->
-  <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-    <ul class="nav navbar-nav">
-      <li class="current"><a class="smoothscroll" href=index.html>Home</a></li>
-      <li><a class="smoothscroll" href="#aboutme">About Me</a></li>
-      <li><a class="smoothscroll" href="#publications">Publications</a></li> 
-      <li><a class="smoothscroll" href="images/cv.pdf" target="_blank">CV</a></li> 
-      <li><a class="smoothscroll" href="#news">News and Updates</a></li>
-    </ul>
-  </div>
-  </div>
-</nav> 
-    
-  <!-- Page Content -->
-    <div class="container">
+<div class="layout">
 
-        <div class="row">
+  <!-- ══════════════ Sidebar ══════════════ -->
+  <aside class="sidebar">
 
+    <div class="profile">
+      <img class="profile-photo" src="images/SayanBiswas_tea.jpeg" alt="Sayan Biswas">
+      <div class="profile-name">Sayan Biswas</div>
+      <div class="profile-role">Postdoctoral Researcher<br>EPFL, Switzerland</div>
+    </div>
 
-                 <!-- Contact Info on the Sidebar 
-                 <div>
-                  <div style="font-family: 'Oswald', sans-serif; font-size: 32px;"><b>Sayan Biswas</b></div><br>
-                  <p><b>sayan.biswas@epfl.ch</b> or <b>bizwas05@gmail.com</b><br></p>
-                  <p> EPFL IC IINFCOM SACS<br>
-                    BC 166 (Bâtiment BC)<br>
-                    Station 14<br>
-                    CH-1015 Lausanne, Switzerland.
-                  </p>
-              </div>
-              -->
-              
-              
-              <!-- Links on the Sidebar 
-              <div>
-                <dd><a href="images/cv.pdf" target="_blank"><i class="ai ai-cv-square"></i> CV</a></dd>
-                <dd><a href="https://www.linkedin.com/in/sayanbiswas5/" target="_blank"><i class="fa fa-linkedin-square"></i> LinkedIn</a></dd>
-                <dd><a href="https://scholar.google.com/citations?user=PqfgluAAAAAJ&hl=en" target="_blank"><i class="ai ai-google-scholar-square"></i> Google Scholar</a></dd> 
-                <dd><a href="https://orcid.org/0000-0002-2115-1495" target="_blank"><i class="ai ai-orcid-square"></i> ORCiD</a></dd>   
-                <dd><a href="https://www.researchgate.net/profile/Sayan-Biswas-3" target="_blank"><i class="ai ai-researchgate-square"></i> ResearchGate</a></dd>
-                <dd><a href="https://twitter.com/home" target="_blank"><i class="fa fa-twitter-square"></i> Twitter</a></dd>      
-              </div>
-              -->
+    <hr class="sidebar-divider">
 
-            <!-- Entries Column -->
-            <div>
-              <div style="font-family: 'Oswald', sans-serif; font-size: 32px;"><b>Sayan Biswas</b></div><br>
-                
-                <!-- Main Image -->
-                <img class="img-responsive" src="images/SayanBiswas_tea.jpeg" alt="Sayan Biswas"
-                width="300" 
-                height="400"/><br>
+    <nav class="sidebar-nav" id="sidebarNav">
+      <a href="#aboutme"><i class="fas fa-user"></i> About Me</a>
+      <a href="#publications"><i class="fas fa-book-open"></i> Publications</a>
+      <a href="#news"><i class="fas fa-newspaper"></i> News &amp; Updates</a>
+      <a href="images/cv.pdf" target="_blank" rel="noopener noreferrer">
+        <i class="fas fa-file-alt"></i> CV
+        <i class="fas fa-up-right-from-square" style="font-size:0.6rem;opacity:0.55;margin-left:auto"></i>
+      </a>
+    </nav>
 
-                <p><b>sayan.biswas@epfl.ch</b> or <b>bizwas05@gmail.com</b><br></p>
-                <p> EPFL IC IINFCOM SACS,<br>
-                  BC 166 (Bâtiment BC), Station 14,<br>
-                  1015 Lausanne, Switzerland.
-                  </p>
-            </div>
-            <div>
-            <h2 id="aboutme">About Me</h2>
-             <!--<div style="margin-top:3%; text-align:justify;">   -->             
-		<p>I am a Postdoctoral Researcher in the <a href="https://www.epfl.ch/labs/sacs/" target="_blank">Scalable Computing Systems (SaCS) lab</a>
-		at <a href="https://www.epfl.ch/en/" target="_blank">EPFL</a>, Switzerland, led by 
-		<a href="https://people.epfl.ch/anne-marie.kermarrec/?lang=en" target="_blank">Prof. Anne-Marie Kermarrec</a>.
-		I completed my PhD in Computer Science 
-		at <a href="https://www.inria.fr/en" target="_blank" >INRIA</a> and <a href="https://www.polytechnique.edu/en" target="_blank">&Eacute;cole Polytechnique</a> in France
-		under the supervision of <a href="http://www.lix.polytechnique.fr/~catuscia/" target="_blank">Prof. Catuscia Palamidessi</a>. Prior to that, I studied mathematics at the <a href="https://www.bath.ac.uk/" target="_blank">University of Bath</a> in the UK, 
-		where I obtained my M.Math with a First-Class Honours.
-		During my PhD, I have been a Visiting Scholar at the 
-		<a href="https://www.mq.edu.au/faculty-of-science-and-engineering/departments-and-schools/school-of-computing" target="_blank">School of Computing</a>
-		at <a href="https://www.mq.edu.au/" target="_blank">Macquarie University</a> in Sydney, Australia (hosted by 
-		<a href="https://researchers.mq.edu.au/en/persons/annabelle-mciver" target="_blank">Prof. Annabelle McIver</a> and 
-		<a href="https://researchers.mq.edu.au/en/persons/natasha-fernandes" target="_blank">Dr. Natasha Fernandes</a>) and 
-		at <a href="https://warwick.ac.uk/fac/sci/wmg" target="_blank">WMG</a> at 
-		<a href="https://warwick.ac.uk/">The University of Warwick</a> in Coventry, England (hosted by 
-		<a href="https://www.turing.ac.uk/people/researchers/carsten-maple" target="_blank">Prof. Carsten Maple</a> and 
-		<a href="http://dimacs.rutgers.edu/~graham/" target="_blank">Prof. Graham Cormode</a>).</p>
+    <hr class="sidebar-divider">
 
-            <p>My research primarily centres on designing secure and trustworthy distributed systems for analysing data and training ML models in decentralized frameworks. 
-		My current research interests revolve around decentralized learning, federated learning, and trustworthy distributed systems, with a particular emphasis on aspects of privacy, fairness, and personalization.
-            </p>
-            
-            <p>I study, talk, and do mathematics most of the time; when not, I am typically immersed in techno music, chess, cricket, philosophy, puzzles, or stand-up comedy.
-        	Lately, I’ve rekindled my love for (non-academic) reading and have become a collector of seemingly useless facts from 
-		all corners of life &mdash; because who doesn’t need to know how often penguins defecate? I am also trying to learn French with limited success so far.
-            <!--I highly do recommend having a (few) favourite mathematical result(s) &mdash;
-            it gives a wonderful opportunity to reflect on how amusing life is when characterized mathematically.-->
-            The list of some of my current favourite results and theorems in mathematics (a list that, obviously, everyone should maintain) includes:
-            <ul>
-            <li><a href="https://en.wikipedia.org/wiki/Derangement#Growth_of_number_of_derangements_as_n_approaches_%E2%88%9E" target="_blank">
-              The limit of the derangement probability of a set as its size approaches infinity is <math display="inline">
-                  <msup>
-                    <mi>e</mi>
-                    <mn>-1</mn>
-                  </msup></math>
-            </a></li>
-            <li><a href="https://en.wikipedia.org/wiki/Gershgorin_circle_theorem" target="_blank">
-              Gershgorin circle theorem
-            </a></li>
-            <li><a href="https://en.wikipedia.org/wiki/Sleeping_Beauty_problem" target="_blank">
-              Sleeping Beauty problem
-            </a></li>
-            <li><a href="https://en.wikipedia.org/wiki/Banach%E2%80%93Tarski_paradox" target="_blank">
-              Banach–Tarski paradox
-            </a></li>
-            <li><a href="https://medium.com/@shuchen.wu2/a-drunk-man-will-find-his-way-home-but-a-drunk-bird-may-get-lost-forever-cc395dcbc2bb" target="_blank">
-              &ldquo;A Drunk Man Will Find His Way Home but a Drunk Bird May Get Lost Forever&rdquo;
-            </a></li>
-          </ul>
-          </p>
-            </div>
+    <div class="contact-block">
+      <div class="contact-item">
+        <i class="fas fa-envelope ci-icon"></i>
+        <div>
+          <a href="mailto:sayan.biswas@epfl.ch">sayan.biswas@epfl.ch</a><br>
+          <a href="mailto:bizwas05@gmail.com">bizwas05@gmail.com</a>
+        </div>
+      </div>
+      <div class="contact-item">
+        <i class="fas fa-location-dot ci-icon"></i>
+        <div>EPFL IC IINFCOM SACS<br>BC 166, Station 14<br>1015 Lausanne, Switzerland</div>
+      </div>
+    </div>
 
-      
+    <hr class="sidebar-divider">
 
-            <!-- Publications -->
-            <div>    
-                <h2 id="publications">Publications</h2>
-                <br>
-                <strong><u style="color: black;">Peer-reviewed conferences</u></strong><br/>
-                <br>
-                <ul>
+    <div class="social-links">
+      <a class="social-link" href="images/cv.pdf" target="_blank" rel="noopener noreferrer">
+        <i class="ai ai-cv"></i> CV
+      </a>
+      <a class="social-link" href="https://scholar.google.com/citations?user=PqfgluAAAAAJ&hl=en" target="_blank" rel="noopener noreferrer">
+        <i class="ai ai-google-scholar"></i> Google Scholar
+      </a>
+      <a class="social-link" href="https://www.linkedin.com/in/sayanbiswas5/" target="_blank" rel="noopener noreferrer">
+        <i class="fab fa-linkedin"></i> LinkedIn
+      </a>
+      <a class="social-link" href="https://orcid.org/0000-0002-2115-1495" target="_blank" rel="noopener noreferrer">
+        <i class="ai ai-orcid"></i> ORCiD
+      </a>
+      <a class="social-link" href="https://www.researchgate.net/profile/Sayan-Biswas-3" target="_blank" rel="noopener noreferrer">
+        <i class="ai ai-researchgate"></i> ResearchGate
+      </a>
+    </div>
 
-		
-		<li class="paper" words="add, your, keywords, here"><span style="color:black", style="font-family: 'Times New Roman';">
-            (2025) Kangsoo Jung, <i>Sayan Biswas</i>, Catuscia Palamidessi: 
-            <b><i>&ldquo;Mitigating Membership Inference Vulnerability in Iterative Federated Clustering Algorithm&rdquo;</b></i>. 
-			Proceedings of Workshop on Recent Advances in Resilient and Trustworthy Machine Learning-Driven Systems (ARTMAN) 
-			co-located with ACM Conference on Computer and Communications Security (CCS) 2025.</span>
-			<a href="Publications/ARTMANCCS25_IFCAMIR.pdf" target="_blank"> <span style="color: black"><u><i>PDF</i></u></span></a>&ensp;, 
-            <a href="https://doi.org/10.1145/3733821.3763022" target="_blank">
-			<span style="color: black"><u><i>DOI: 10.1145/3733821.3763022</i></u></span></a>
-            </li>
-        	<br>
+  </aside>
+  <!-- ══════════════ End Sidebar ══════════════ -->
 
-		<li class="paper" words="add, your, keywords, here"><span style="color:black", style="font-family: 'Times New Roman';">
-                (2025) Jade Garcia Bourr&eacute;e, Augustin Godinot, <i>Sayan Biswas</i>, Anne-Marie Kermarrec, Erwan Le Merrer, Gilles Tredan, Martijn de Vos, Milos Vujasinovic: 
-                <b><i>&ldquo;Robust ML Auditing using Prior Knowledge&rdquo;</b></i>. Proceedings of International Conference on Machine Learning (ICML) 2025. <b>Accepted as
-		<i>spotlight</i> (top 2.6% papers)</b>.</span>
-		<a href="Publications/ICML25_audits.pdf" target="_blank"> <span style="color: black"><u><i>PDF</i></u></span></a>&ensp;, 
-                <a href="https://openreview.net/forum?id=AiaVCVDuxF" target="_blank">
-		<span style="color: black"><u><i>OpenReview</i></u></span></a>
-               	</li>
-        
+  <!-- ══════════════ Main Content ══════════════ -->
+  <main class="main">
 
-                <br>
+    <!-- ── About Me ── -->
+    <section class="section" id="aboutme">
+      <h2 class="section-title">About Me</h2>
+      <div class="about-content">
+        <p>I am a Postdoctoral Researcher in the
+          <a href="https://www.epfl.ch/labs/sacs/" target="_blank" rel="noopener noreferrer">Scalable Computing Systems (SaCS) lab</a>
+          at <a href="https://www.epfl.ch/en/" target="_blank" rel="noopener noreferrer">EPFL</a>, Switzerland, led by
+          <a href="https://people.epfl.ch/anne-marie.kermarrec/?lang=en" target="_blank" rel="noopener noreferrer">Prof. Anne-Marie Kermarrec</a>.
+          I completed my PhD in Computer Science at
+          <a href="https://www.inria.fr/en" target="_blank" rel="noopener noreferrer">INRIA</a> and
+          <a href="https://www.polytechnique.edu/en" target="_blank" rel="noopener noreferrer">&Eacute;cole Polytechnique</a> in France
+          under the supervision of
+          <a href="http://www.lix.polytechnique.fr/~catuscia/" target="_blank" rel="noopener noreferrer">Prof. Catuscia Palamidessi</a>.
+          Prior to that, I studied mathematics at the
+          <a href="https://www.bath.ac.uk/" target="_blank" rel="noopener noreferrer">University of Bath</a> in the UK,
+          where I obtained my M.Math with a First-Class Honours.
+          During my PhD, I have been a Visiting Scholar at the
+          <a href="https://www.mq.edu.au/faculty-of-science-and-engineering/departments-and-schools/school-of-computing" target="_blank" rel="noopener noreferrer">School of Computing</a>
+          at <a href="https://www.mq.edu.au/" target="_blank" rel="noopener noreferrer">Macquarie University</a> in Sydney, Australia
+          (hosted by <a href="https://researchers.mq.edu.au/en/persons/annabelle-mciver" target="_blank" rel="noopener noreferrer">Prof. Annabelle McIver</a> and
+          <a href="https://researchers.mq.edu.au/en/persons/natasha-fernandes" target="_blank" rel="noopener noreferrer">Dr. Natasha Fernandes</a>)
+          and at <a href="https://warwick.ac.uk/fac/sci/wmg" target="_blank" rel="noopener noreferrer">WMG</a> at
+          <a href="https://warwick.ac.uk/" target="_blank" rel="noopener noreferrer">The University of Warwick</a> in Coventry, England
+          (hosted by <a href="https://www.turing.ac.uk/people/researchers/carsten-maple" target="_blank" rel="noopener noreferrer">Prof. Carsten Maple</a> and
+          <a href="http://dimacs.rutgers.edu/~graham/" target="_blank" rel="noopener noreferrer">Prof. Graham Cormode</a>).
+        </p>
 
-		<li class="paper" words="add, your, keywords, here"><span style="color:black", style="font-family: 'Times New Roman';">
-                (2025) <i> Sayan Biswas</i>, Davide Frey, Romaric Gaudel, Anne-Marie Kermarrec, 
-		Dimitri Ler&eacute;v&eacute;rend, Rafael Pires, Rishi Sharma, Fran&ccedil;ois Ta&iuml;ani: 
-                <b><i>&ldquo;Low-Cost Privacy-Aware Decentralized Learning&rdquo;</b></i>.
-		Proceedings of Privacy Enhancing Technologies Symposium (PoPETs) 2025, Issue 3.</span>
-		<a href="Publications/popets-2025-zipDL.pdf" target="_blank"> <span style="color: black"><u><i>PDF</i></u></span></a>&ensp;, 
-                <a href="https://doi.org/10.56553/popets-2025-0108" target="_blank">
-		<span style="color: black"><u><i>DOI: 10.56553/popets-2025-0108</i></u></span></a></li>
+        <p>My research primarily centres on designing secure and trustworthy distributed systems for analysing data
+          and training ML models in decentralized frameworks. My current research interests revolve around
+          decentralized learning, federated learning, and trustworthy distributed systems, with a particular
+          emphasis on aspects of privacy, fairness, and personalization.
+        </p>
 
-		<br>
-
-
-		<li class="paper" words="add, your, keywords, here"><span style="color:black", style="font-family: 'Times New Roman';">
-                (2025) <i> Sayan Biswas</i>, Anne-Marie Kermarrec, Alexis Marouani, Rafael Pires, Rishi Sharma, Martijn de Vos: 
-                <b><i>&ldquo;Boosting Asynchronous Decentralized Learning with Model Fragmentation&rdquo;</b></i>.
-		Proceedings of the ACM Web Conference (WWW) 2025. <b>Selected for <i>oral presentation</i>
-		(top 7% papers)</b>.</span>
-		<a href="Publications/WWW25_DivShare.pdf" target="_blank"> <span style="color: black"><u><i>PDF</i></u></span></a>&ensp;, 
-                <a href="https://doi.org/10.1145/3696410.3714872" target="_blank">
-		<span style="color: black"><u><i>DOI: 10.1145/3696410.3714872</i></u></span></a>
-               	</li>
-        
-
-                <br>
-			
-		<li class="paper" words="add, your, keywords, here"><span style="color:black", style="font-family: 'Times New Roman';">
-                (2024) <i> Sayan Biswas</i>, Anne-Marie Kermarrec, Rishi Sharma, Thibaud Trinca, Martijn de Vos: 
-                <b><i>&ldquo;Fair Decentralized Learning&rdquo;</b></i>.
-		Proceedings of IEEE Conference on Secure and Trustworthy Machine Learning (SaTML) 2025.</span>
-		<a href="Publications/FACADE SaTML25.pdf" target="_blank"> <span style="color: black"><u><i>PDF</i></u></span></a>&ensp;, 
-                <a href="https://doi.org/10.1109/SaTML64287.2025.00045" target="_blank">
-		<span style="color: black"><u><i>DOI: 10.1109/SaTML64287.2025.00045</i></u></span></a>
-               </li>
-        
-
-                <br>
-			
-			
-		<li class="paper" words="add, your, keywords, here"><span style="color:black", style="font-family: 'Times New Roman';">
-                (2024) <i> Sayan Biswas</i>, Mathieu Even, Anne-Marie Kermarrec, Laurent Massoulie, Rafael Pires, Rishi Sharma, Martijn de Vos: 
-                <b><i>&ldquo;Noiseless Privacy-Preserving Decentralized Learning&rdquo;</b></i>.
-		Proceedings of Privacy Enhancing Technologies Symposium (PoPETs) 2025, Issue 1.</span>
-                <a href="Publications/popets-2025-0043.pdf" target="_blank"> <span style="color: black"><u><i>PDF</i></u></span></a>&ensp;, 
-                <a href=" https://doi.org/10.56553/popets-2025-0043" target="_blank">
-		<span style="color: black"><u><i>DOI: 10.56553/popets-2025-0043</i></u></span></a></li>
-        
-
-                <br>
-                
-
-                <li class="paper" words="add, your, keywords, here"><span style="color:black", style="font-family: 'Times New Roman';">
-                (2023) <i> Sayan Biswas</i>, Kangsoo Jung, Catuscia Palamidessi: 
-                <b><i>&ldquo;Tight Differential Privacy Guarantees for the Shuffle Model
-                with k-Randomized Response&rdquo;</b></i>.
-                Proceedings of International Symposium on Foundations and Practice of Security
-                (FPS) 2023.</span> &ensp;
-                <a href="Publications/fps23.pdf" target="_blank"> <span style="color: black"> <u><i>PDF</i></u></span></a>&ensp;,
-                <a href="https://link.springer.com/chapter/10.1007/978-3-031-57537-2_27" target="_blank"> 
-                <span style="color: black"><u><i>DOI: 10.1007/978-3-031-57537-2_27</i></u></span></a></li>
-		
-		<br>
-
-                <li class="paper" words="add, your, keywords, here"><span style="color:black", style="font-family: 'Times New Roman';">
-                (2023) <i> Sayan Biswas</i>, Catuscia Palamidessi: 
-                <b><i>&ldquo;PRIVIC: A privacy-preserving method for incremental collection
-                of location data&rdquo;</b></i>.
-                Proceedings of Privacy Enhancing Technologies Symposium (PoPETs) 2024.
-                <a href="Publications/popets-2024-0033.pdf" target="_blank"> <span style="color: black"><u><i>PDF</i></u></span></a>&ensp;, 
-                <a href=" https://doi.org/10.56553/popets-2024-0033" target="_blank"> 
-                <span style="color: black"><u><i>DOI: 10.56553/popets-2024-0033</i></u></span></a></li>
-
-                <br>
-                
-                <li class="paper" words="add, your, keywords, here"><span style="color:black", style="font-family: 'Times New Roman';">
-                (2023) Filippo Galli, <i> Sayan Biswas</i>, Kangsoo Jung, Tommaso Cucinotta, Catuscia Palamidessi: 
-                <b><i>&ldquo;Group privacy for Personalized Federated Learning&rdquo;</b></i>.
-                Proceedings of International Conference on Information Systems Security and Privacy (ICISSP) 2023. 
-                <a href="Publications/icissp23.pdf" target="_blank"> <span style="color: black"><u><i>PDF</i></u></span></a>&ensp;, 
-                <a href="https://www.scitepress.org/PublicationsDetail.aspx?ID=/v2y5vLi1EE=&t=1" target="_blank"> 
-                <span style="color: black"><u><i>DOI: 10.5220/0011885000003405</i></u></span></a></li>
-
-                <br>
-              
-                <li class="paper" words="add, your, keywords, here"><span style="color:black", style="font-family: 'Times New Roman';">
-                (2022) <i> Sayan Biswas</i>, Graham Cormode, Carsten Maple: 
-                <b><i>&ldquo;Impact of Sampling on Locally Differentially Private Data Collection&rdquo;</b></i>.
-                Proceedings of Competitive Advantage in the Digital Economy 
-                -- Resilience, Sustainability, Responsibility, and Identity (CADE) 2022.
-                <b>Winner of the </b><a href="images/best_paper_CADE.pdf" target="_blank"> 
-                <span style="color: black; font-weight: bold">Best Paper Award</span></a>.</span> &ensp;
-                <a href="Publications/CADE2021_Impact.pdf" target="_blank"> <span style="color: black"><u><i>PDF</i></u></span></a>&ensp;, 
-                <a href="https://ieeexplore.ieee.org/document/9946036" target="_blank"> 
-                <span style="color: black"><u><i>DOI: 10.1049/icp.2022.2042</i></u></span></a></li>
-
-                <br>
-
-                <li class="paper" words="add, your, keywords, here"><span style="color:black", style="font-family: 'Times New Roman';">
-                (2022) <i> Sayan Biswas</i>, Kangsoo Jung, Catuscia Palamidessi: 
-                <b><i>&ldquo;Tight Differential Privacy Blanket for Shuffle Model&rdquo;</b></i>.
-                Proceedings of Competitive Advantage in the Digital Economy 
-                -- Resilience, Sustainability, Responsibility, and Identity (CADE) 2022.
-                </span> &ensp;
-                <a href="Publications/CADE21_TightDP.pdf" target="_blank"> <span style="color: black"><u><i>PDF</i></u></span></a>&ensp;, 
-                <a href="https://ieeexplore.ieee.org/document/9946042" target="_blank"> 
-                <span style="color: black"><u><i>DOI: 10.1049/icp.2022.2041</i></u></span></a></li>
-
-                <br>
-  
-                <li class="paper" words="add, your, keywords, here"><span style="color:black", style="font-family: 'Times New Roman';">
-                (2021) <i> Sayan Biswas</i>, Kangsoo Jung, Catuscia Palamidessi: 
-                <b><i>&ldquo;An Incentive Mechanism for Trading Personal Data in Data Markets&rdquo;</i></b>.
-                Proceedings of International Colloquium on Theoretical Aspects of Computing (ICTAC) 2021.</span> &ensp;
-                <a href="Publications/ictac21.pdf" target="_blank"> <span style="color: black"> <u><i>PDF</i></u></span></a>&ensp;,
-                <a href="https://link.springer.com/chapter/10.1007%2F978-3-030-85315-0_12" target="_blank"> 
-                <span style="color: black"><u><i>DOI: 10.1007/978-3-030-85315-0_12</i></u></span></a></li>
-    
-     
-                </ul>
-
-                <br>
-
-                <strong><u style="color: black;">Journals</u></strong><br/>
-                <br>
-                <ul>
-		<li class="paper" words="add, your, keywords, here"><dd><span style="color:black", style="font-family: 'Times New Roman';">
-                (2024) Ugur Ilker Atmaca, <i> Sayan Biswas</i>, Carsten Maple, Catuscia Palamidessi:
-                <b><i>&ldquo;A Privacy-Preserving Querying Mechanism with High Utility for Electric Vehicles&rdquo;</i></b>.
-                IEEE Open Journal of Vehicular Technology, Volume 5, pp 262-277.</span> &ensp;
-		<a href="Publications/OJVT24.pdf" target="_blank"> <span style="color: black"><u><i>PDF</i></u></span></a>&ensp;,
-                <a href="https://ieeexplore.ieee.org/document/10416404" target="_blank"> 
-                <span style="color: black"><u><i>DOI: 10.1109/OJVT.2024.3360302</i></u></span></a>
-                </li>
-
-		<br>
-			
-                <li class="paper" words="add, your, keywords, here"><dd><span style="color:black", style="font-family: 'Times New Roman';">
-                  (2023) Filippo Galli, Kangsoo Jung, <i> Sayan Biswas</i>, Catuscia Palamidessi, Tommaso Cucinotta:
-                  <b><i>&ldquo;Advancing Personalized Federated Learning: Group Privacy, Fairness, and Beyond&rdquo;</i></b>.
-                  Springer Nature Computer Science, Volume 4, Issue 6, Article 831 (2023).</span> &ensp;
-                  <a href="Publications/sncs23.pdf" target="_blank"> <span style="color: black"><u><i>PDF</i></u></span></a>&ensp;,
-                  <a href="https://doi.org/10.1007/s42979-023-02292-0" target="_blank"> 
-                  <span style="color: black"><u><i>DOI: 10.1007/s42979-023-02292-0</i></u></span></a>
-                </li>
-
-		
-                </ul>
-
-                <br>
-
-                <strong><u style="color: black;">Book sections</u></strong><br/>
-                <br>
-                <ul>
-                <li class="paper" words="add, your, keywords, here"><dd><span style="color:black", style="font-family: 'Times New Roman';">
-                  (2021) Kangsoo Jung, <i> Sayan Biswas</i>, Catuscia Palamidessi:
-                  <b><i>&ldquo;Establishing the Price of Privacy in Federated Data Trading&rdquo;</i></b>.
-                  Protocols, Strands, and Logic, pp 232-250, LNCS 13066, Springer.</span> &ensp;
-                  <a href="Publications/FestschriftJoshua21.pdf" target="_blank"> <span style="color: black"><u><i>PDF</i></u></span></a>&ensp;,
-                  <a href="https://link.springer.com/chapter/10.1007/978-3-030-91631-2_13" target="_blank"> 
-                  <span style="color: black"><u><i>DOI: 10.1007/978-3-030-91631-2_13</i></u></span></a></li>
-                </ul>
-                <br>
-
-                <strong><u style="color: black;">Non-archival workshops</u></strong><br/>
-                <br>
-                <ul>
-
-		<li class="paper" words="add, your, keywords, here"><span style="color:black", style="font-family: 'Times New Roman';">
-                    (2024) <i> Sayan Biswas</i>,  Mark Dras,  Pedro Faustini, Natasha Fernandes, Annabelle McIver, Catuscia Palamidessi, Parastoo Sadeghi: 
-                    <b><i>&ldquo;Bayes' capacity as a measure for reconstruction attacks in federated learning&rdquo;</b></i>.
-                    <a href="https://protectitworkshop.github.io/protectit-workshop.github.io/" target="_blank">
-		Workshop on Security, Privacy, and Information Theory (Protect-IT) in conjunction with IEEE Computer Security Foundations Symposium (CSF) 2024.</a> 
-                    July 8, 2024; Enschede, The Netherlands. <a href="https://arxiv.org/abs/2406.13569v1" target="_blank"> 
-                  <span style="color: black"><u><i>Workshop paper</i></u></span></a></li>
-                  
-                  <br>
-
-			
-		<li class="paper" words="add, your, keywords, here"><span style="color:black", style="font-family: 'Times New Roman';">
-                    (2023) <i> Sayan Biswas</i>, Catuscia Palamidessi: 
-                    <b><i>&ldquo;PRIVIC: A privacy-preserving method for incremental collection
-                      of location data&rdquo;</b></i>.
-                    <a href="https://tpdp.journalprivacyconfidentiality.org/2023/" target="_blank">Theory and Practice of Differential Privacy (TPDP) 2023.</a> 
-                    September 27-28, 2023; Boston, USA.</li>
-                  
-                  <br>
-
-                  <li class="paper" words="add, your, keywords, here"><span style="color:black", style="font-family: 'Times New Roman';">
-                  (2023) Filippo Galli, <i> Sayan Biswas</i>, Kangsoo Jung, Tommaso Cucinotta, Catuscia Palamidessi: 
-                  <b><i>&ldquo;On the adaptive sensitivity of differentially private machine learning&rdquo;</b></i>.
-                  <a href="https://aaai-ppai23.github.io/" target="_blank">The 4th Workshop on Privacy-Preserving 
-                  Artificial Intelligence (PPAI) in conjunction with AAAI 2023.</a> 
-                  February 13, 2023; Washington DC, USA.</li>
-
-                  <br>
-
-                  <li class="paper" words="add, your, keywords, here"><span style="color:black", style="font-family: 'Times New Roman';">
-                  (2022) Filippo Galli, <i> Sayan Biswas</i>, Kangsoo Jung, Tommaso Cucinotta, Catuscia Palamidessi: 
-                  <b><i>&ldquo;Group privacy for Personalized Federated Learning&rdquo;</b></i>.
-                  <a href="https://federated-learning.org/fl-neurips-2022/" target="_blank">International Workshop on Federated Learning: 
-                  Recent Advances and New Challenges (FL-NeurIPS) in conjunction with NeurIPS 2022.</a> 
-                  December 2, 2022; New Orleans, USA. One of the <b>12 amongst the
-                  103 submissions selected for oral presentation</b>.&ensp;
-                  <a href="https://openreview.net/forum?id=R45g30SnwsR" target="_blank"> 
-                  <span style="color: black"><u><i>Workshop paper</i></u></span></a></li></li>
-                </ul> 
-            </div>      
-        
-
-        <!-- News -->
-        <div>    
-          <h2 id="news">News and Updates</h2>
-          <br>
+        <p>I study, talk, and do mathematics most of the time; when not, I am typically immersed in techno music,
+          chess, cricket, philosophy, puzzles, or stand-up comedy. Lately, I&rsquo;ve rekindled my love for
+          (non-academic) reading and have become a collector of seemingly useless facts from all corners of life
+          &mdash; because who doesn&rsquo;t need to know how often penguins defecate? I am also trying to learn
+          French with limited success so far. The list of some of my current favourite results and theorems in
+          mathematics (a list that, obviously, everyone should maintain) includes:
           <ul>
             <li>
-              <b>Oct'23:</b> I am moving to Lausanne, Switzerland and am
-              starting as a Postdoctoral Researcher at the <a href="https://www.epfl.ch/labs/sacs/" target="_blank">SaCS lab</a> at <a href="https://www.epfl.ch/en/" target="_blank">EPFL</a>
-              under the supervision of <a href="https://people.epfl.ch/anne-marie.kermarrec/?lang=en" target="_blank">Anne-Marie Kermarrec</a> to work on designing privacy-preserving decentralised models. 
-              <br>
+              <a href="https://en.wikipedia.org/wiki/Derangement#Growth_of_number_of_derangements_as_n_approaches_%E2%88%9E" target="_blank" rel="noopener noreferrer">
+                The limit of the derangement probability of a set as its size approaches infinity is \(e^{-1}\)
+              </a>
             </li>
-            <br>
+            <li><a href="https://en.wikipedia.org/wiki/Gershgorin_circle_theorem" target="_blank" rel="noopener noreferrer">Gershgorin circle theorem</a></li>
+            <li><a href="https://en.wikipedia.org/wiki/Sleeping_Beauty_problem" target="_blank" rel="noopener noreferrer">Sleeping Beauty problem</a></li>
+            <li><a href="https://en.wikipedia.org/wiki/Banach%E2%80%93Tarski_paradox" target="_blank" rel="noopener noreferrer">Banach&ndash;Tarski paradox</a></li>
             <li>
-              <b>Oct'23:</b> I successfully defended my PhD thesis titled <i>Understanding and optimizing the trade-off between privacy and utility from a foundational perspective</i> 
-              and have been awarded the title of "Doctor of Computer Science" from <a href="https://www.polytechnique.edu/en" target="_blank">&Eacute;cole Polytechnique</a> and
-              <a href="https://www.ip-paris.fr/en" target="_blank">Institut Polytechnique de Paris</a>!
-              <br>
-              &ndash; <a href="images/PhD.png" target="_blank">Photo ft. the moment of the official change from "Mr. Sayan Biswas" to "Dr. Sayan Biswas".</a>
+              <a href="https://medium.com/@shuchen.wu2/a-drunk-man-will-find-his-way-home-but-a-drunk-bird-may-get-lost-forever-cc395dcbc2bb" target="_blank" rel="noopener noreferrer">
+                &ldquo;A Drunk Man Will Find His Way Home but a Drunk Bird May Get Lost Forever&rdquo;
+              </a>
             </li>
-            <br>
-            <li>
-              <b>Sep'23:</b> Recently, I was visiting <a href="https://researchers.mq.edu.au/en/persons/annabelle-mciver" target="_blank">Annabelle McIiver</a> and 
-              <a href="https://researchers.mq.edu.au/en/persons/natasha-fernandes" target="_blank">Natasha Fernandes</a> at
-              at <a href="https://www.mq.edu.au/" target="_blank">Macquarie University</a> in Sydney, Australia, studying the information leakage from differentially private mechanisms 
-              from a foundational perspective and doing lots of fun maths!
-              <br>
-            </li>
-            <br>
-
-            <li>
-              <b>Aug'23:</b> Continuing its journey of success, our paper <a href="https://arxiv.org/abs/2206.10525" target="_blank"><b><i>"PRIVIC: A privacy-preserving method for incremental collection
-              of location data"</b></i></a> got selected for presentation at the <a href="https://tpdp.journalprivacyconfidentiality.org/2023/" target="_blank">Theory and Practice of Differential Privacy Workshop (TPDP) 2023</a>
-              to be held in Boston, USA on September 27-28, 2023.<br>
-            </li>
-            <br>
-
-            <li>
-            <b>Aug'23:</b> Our paper <a href="https://arxiv.org/abs/2206.10525" target="_blank"><b><i>"PRIVIC: A privacy-preserving method for incremental collection
-            of location data"</b></i></a> got accepted for publication at the <a href="https://petsymposium.org/index.php" target="_blank">24th Privacy Enhancing Technologies Symposium (PETS 2024)</a>
-            to be held in Bristol, UK in July, 2024.<br>
-            </li>
-            <br>
-            <li>
-            <b>Jul'23:</b> Presented an ongoing work 
-            <b><i>"Characterizing the information leakage from gradient updates in federated learning"</b></i> 
-            at the July seminar by
-            <a href="https://project.inria.fr/fedmalin/" target="_blank">FedMalin</a> 
-            held online on July 10, 2023.<br>
-            &ndash; <a href="images/Fedmalin.png" target="_blank">Photo illustrating the philosophy 
-            <i>"When someone asks a question during your talk, first have some tea."</i></a>
-            </li>
-            <br>
-            <li>
-            <b>Feb'23:</b> Presented our position paper 
-            <b><i>"On the adaptive sensitivity of differentially private machine learning"</b></i>
-            at the 
-            <a href="https://aaai-ppai23.github.io/" target="_blank">4th AAAI Workshop on Privacy-Preserving Artificial Intelligence 
-            (PPAI-23)</a> held in conjunction with AAAI 2023 in Washington DC, USA on February 13, 2023.<br>
-            </li>
-            <br>
-            <li>
-            <b>Dec'22:</b> Presented our paper 
-            <b><i>"Group privacy for personalized federated learning"</b></i>
-            at the 
-            <a href="https://federated-learning.org/fl-neurips-2022/" target="_blank">International Workshop on Federated Learning: Recent Advances 
-            and New Challenges in Conjunction with NeurIPS (FL-NeurIPS) 2022</a> in New Orleans, USA on December 2, 2022.<br>
-            </li>
-            <br>
-            <li>
-            <b>Nov'22:</b> Presented our paper 
-            <b><i>"Group privacy for personalized federated learning"</b></i>
-            at the Privacy Preserving Machine Learning (PPML) Workshop organised by
-            <a href="https://www.metacareers.com/v2/locations/paris/?p[offices][0]=Paris%2C%20France&offices[0]=Paris%2C%20France" target="_blank">Meta, Paris</a>
-            on November 9, 2022.<br>
-            &ndash; <a href="images/metaPPML.jpeg" target="_blank">Photo ft. 
-            three of the five co-authors of the work who struggle to pose elegantly.</a>
-            </li>
-            <br>
-            <li>
-            <b>Jun'22:</b> Gave a talk on
-            <b><i>"A privacy-preserving method for incremental collection of location data: Differential Privacy and beyond"</b></i>
-            at the <a href="https://project.inria.fr/FranceJapanICST/about-the-7th-franco-japanese-cybersecurity-workshop-october-24-26/" target="_blank">
-            7th Franco-Japanese Cybersecurity Workshop</a> in Tokyo, Japan on October 24, 2022.<br>
-            &ndash; <a href="images/talk.jpeg" target="_blank">Photo ft. an underslept, overtravelled, and perpetually excited
-            Sayan giving the talk.</a>
-            </li>
-            <br>
-            <li>
-            <b>Aug'22:</b> Designed and delivered a hands-on session
-            to implement <i>differential privacy</i> with <i>federated learning</i> at the
-            <a href="https://idessai.eu/" target="_blank">2nd INRIA-DFKI European Summer School on AI (IDESSAI 2022)</a>
-            held in Saarbr&uuml;cken, Germany from August 29 to September 2, 2022. <br>
-            &ndash; <a href="images/likedtalk.jpeg" target="_blank"> The course
-            got a special mention as the most liked course taught in the summer school. :)</a>
-            </li>
-            <br>
-            <li>
-            <b>Aug'22:</b> Won the  
-            <b><i>"Best Paper Award"</b></i> for the paper 
-            <b><i>"Impact of Sampling on Locally Differentially Private Data Collection"</b></i> 
-            at <a href="https://ieeexplore.ieee.org/xpl/conhome/9945911/proceeding" target="_blank">CADE 2022</a>
-            held in Venice, Italy on June 13-15, 2022.<br>
-            &ndash; <a href="images/best_paper_CADE.pdf" target="_blank">Certificate
-            conferring the award.</a>
-            </li>
-            <br>
-            <li>
-            <b>Jun'22:</b> Presented an on-going work on 
-            <b><i>"Three-way optimization of privacy and utility of location data"</b></i>
-            at <a href="https://apvp2022.sciencesconf.org/" target="_blank">APVP 2022</a> in Chatenay sur Seine, France on June 15, 2022.<br>
-            &ndash; <a href="images/APVP.jpeg">Photo ft. the most 
-            Baroque setting and the most non-Baroque outfit to give a talk in.</a>
-            </li>
-            <br>
-            <li>
-            <b>Jun'22:</b> Presented the paper 
-            <b><i>"Impact of Sampling on Locally Differentially Private Data Collection"</b></i>
-            at <a href="https://ieeexplore.ieee.org/xpl/conhome/9945911/proceeding" target="_blank">CADE 2022</a>
-            in Venice, Italy on June 13-15, 2022.<br>
-            &ndash; <a href="images/CADE.jpeg" target="_blank">Photo ft. an elated Sayan engrossed in 
-            explaining differential privacy to the crowd.</a>
-            </li>
-            <br>
           </ul>
+        </p>
+      </div>
+    </section>
+
+    <!-- ── Publications ── -->
+    <section class="section" id="publications">
+      <h2 class="section-title">Publications</h2>
+
+      <!-- Peer-reviewed conferences -->
+      <div class="pub-category">
+        <div class="pub-category-label">Peer-reviewed Conferences</div>
+        <div class="pub-list">
+
+          <div class="pub-item">
+            <div class="pub-year">2025</div>
+            <div class="pub-title">&ldquo;Mitigating Membership Inference Vulnerability in Iterative Federated Clustering Algorithm&rdquo;</div>
+            <div class="pub-authors">Kangsoo Jung, <span class="me">Sayan Biswas</span>, Catuscia Palamidessi</div>
+            <div class="pub-venue">Workshop on Recent Advances in Resilient and Trustworthy ML-Driven Systems (ARTMAN) @ CCS 2025</div>
+            <div class="pub-footer">
+              <div class="pub-links">
+                <a class="pub-link" href="Publications/ARTMANCCS25_IFCAMIR.pdf" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-pdf"></i> PDF</a>
+                <a class="pub-link" href="https://doi.org/10.1145/3733821.3763022" target="_blank" rel="noopener noreferrer"><i class="fas fa-link"></i> DOI</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="pub-item">
+            <div class="pub-year">2025</div>
+            <div class="pub-title">&ldquo;Robust ML Auditing using Prior Knowledge&rdquo;</div>
+            <div class="pub-authors">Jade Garcia Bourr&eacute;e, Augustin Godinot, <span class="me">Sayan Biswas</span>, Anne-Marie Kermarrec, Erwan Le Merrer, Gilles Tredan, Martijn de Vos, Milos Vujasinovic</div>
+            <div class="pub-venue">International Conference on Machine Learning (ICML) 2025</div>
+            <div class="pub-footer">
+              <span class="badge badge-spotlight">&#9733; Spotlight &mdash; top 2.6%</span>
+              <div class="pub-links">
+                <a class="pub-link" href="Publications/ICML25_audits.pdf" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-pdf"></i> PDF</a>
+                <a class="pub-link" href="https://openreview.net/forum?id=AiaVCVDuxF" target="_blank" rel="noopener noreferrer"><i class="fas fa-link"></i> OpenReview</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="pub-item">
+            <div class="pub-year">2025</div>
+            <div class="pub-title">&ldquo;Low-Cost Privacy-Aware Decentralized Learning&rdquo;</div>
+            <div class="pub-authors"><span class="me">Sayan Biswas</span>, Davide Frey, Romaric Gaudel, Anne-Marie Kermarrec, Dimitri Ler&eacute;v&eacute;rend, Rafael Pires, Rishi Sharma, Fran&ccedil;ois Ta&iuml;ani</div>
+            <div class="pub-venue">Privacy Enhancing Technologies Symposium (PoPETs) 2025, Issue 3</div>
+            <div class="pub-footer">
+              <div class="pub-links">
+                <a class="pub-link" href="Publications/popets-2025-zipDL.pdf" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-pdf"></i> PDF</a>
+                <a class="pub-link" href="https://doi.org/10.56553/popets-2025-0108" target="_blank" rel="noopener noreferrer"><i class="fas fa-link"></i> DOI</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="pub-item">
+            <div class="pub-year">2025</div>
+            <div class="pub-title">&ldquo;Boosting Asynchronous Decentralized Learning with Model Fragmentation&rdquo;</div>
+            <div class="pub-authors"><span class="me">Sayan Biswas</span>, Anne-Marie Kermarrec, Alexis Marouani, Rafael Pires, Rishi Sharma, Martijn de Vos</div>
+            <div class="pub-venue">ACM Web Conference (WWW) 2025</div>
+            <div class="pub-footer">
+              <span class="badge badge-oral">&#9679; Oral &mdash; top 7%</span>
+              <div class="pub-links">
+                <a class="pub-link" href="Publications/WWW25_DivShare.pdf" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-pdf"></i> PDF</a>
+                <a class="pub-link" href="https://doi.org/10.1145/3696410.3714872" target="_blank" rel="noopener noreferrer"><i class="fas fa-link"></i> DOI</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="pub-item">
+            <div class="pub-year">2025</div>
+            <div class="pub-title">&ldquo;Fair Decentralized Learning&rdquo;</div>
+            <div class="pub-authors"><span class="me">Sayan Biswas</span>, Anne-Marie Kermarrec, Rishi Sharma, Thibaud Trinca, Martijn de Vos</div>
+            <div class="pub-venue">IEEE Conference on Secure and Trustworthy Machine Learning (SaTML) 2025</div>
+            <div class="pub-footer">
+              <div class="pub-links">
+                <a class="pub-link" href="Publications/FACADE SaTML25.pdf" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-pdf"></i> PDF</a>
+                <a class="pub-link" href="https://doi.org/10.1109/SaTML64287.2025.00045" target="_blank" rel="noopener noreferrer"><i class="fas fa-link"></i> DOI</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="pub-item">
+            <div class="pub-year">2025</div>
+            <div class="pub-title">&ldquo;Noiseless Privacy-Preserving Decentralized Learning&rdquo;</div>
+            <div class="pub-authors"><span class="me">Sayan Biswas</span>, Mathieu Even, Anne-Marie Kermarrec, Laurent Massoulie, Rafael Pires, Rishi Sharma, Martijn de Vos</div>
+            <div class="pub-venue">Privacy Enhancing Technologies Symposium (PoPETs) 2025, Issue 1</div>
+            <div class="pub-footer">
+              <div class="pub-links">
+                <a class="pub-link" href="Publications/popets-2025-0043.pdf" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-pdf"></i> PDF</a>
+                <a class="pub-link" href="https://doi.org/10.56553/popets-2025-0043" target="_blank" rel="noopener noreferrer"><i class="fas fa-link"></i> DOI</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="pub-item">
+            <div class="pub-year">2023</div>
+            <div class="pub-title">&ldquo;Tight Differential Privacy Guarantees for the Shuffle Model with k-Randomized Response&rdquo;</div>
+            <div class="pub-authors"><span class="me">Sayan Biswas</span>, Kangsoo Jung, Catuscia Palamidessi</div>
+            <div class="pub-venue">International Symposium on Foundations and Practice of Security (FPS) 2023</div>
+            <div class="pub-footer">
+              <div class="pub-links">
+                <a class="pub-link" href="Publications/fps23.pdf" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-pdf"></i> PDF</a>
+                <a class="pub-link" href="https://link.springer.com/chapter/10.1007/978-3-031-57537-2_27" target="_blank" rel="noopener noreferrer"><i class="fas fa-link"></i> DOI</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="pub-item">
+            <div class="pub-year">2023</div>
+            <div class="pub-title">&ldquo;PRIVIC: A privacy-preserving method for incremental collection of location data&rdquo;</div>
+            <div class="pub-authors"><span class="me">Sayan Biswas</span>, Catuscia Palamidessi</div>
+            <div class="pub-venue">Privacy Enhancing Technologies Symposium (PoPETs) 2024</div>
+            <div class="pub-footer">
+              <div class="pub-links">
+                <a class="pub-link" href="Publications/popets-2024-0033.pdf" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-pdf"></i> PDF</a>
+                <a class="pub-link" href="https://doi.org/10.56553/popets-2024-0033" target="_blank" rel="noopener noreferrer"><i class="fas fa-link"></i> DOI</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="pub-item">
+            <div class="pub-year">2023</div>
+            <div class="pub-title">&ldquo;Group privacy for Personalized Federated Learning&rdquo;</div>
+            <div class="pub-authors">Filippo Galli, <span class="me">Sayan Biswas</span>, Kangsoo Jung, Tommaso Cucinotta, Catuscia Palamidessi</div>
+            <div class="pub-venue">International Conference on Information Systems Security and Privacy (ICISSP) 2023</div>
+            <div class="pub-footer">
+              <div class="pub-links">
+                <a class="pub-link" href="Publications/icissp23.pdf" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-pdf"></i> PDF</a>
+                <a class="pub-link" href="https://www.scitepress.org/PublicationsDetail.aspx?ID=/v2y5vLi1EE=&t=1" target="_blank" rel="noopener noreferrer"><i class="fas fa-link"></i> DOI</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="pub-item">
+            <div class="pub-year">2022</div>
+            <div class="pub-title">&ldquo;Impact of Sampling on Locally Differentially Private Data Collection&rdquo;</div>
+            <div class="pub-authors"><span class="me">Sayan Biswas</span>, Graham Cormode, Carsten Maple</div>
+            <div class="pub-venue">Competitive Advantage in the Digital Economy (CADE) 2022</div>
+            <div class="pub-footer">
+              <span class="badge badge-award">&#127942; Best Paper Award</span>
+              <div class="pub-links">
+                <a class="pub-link" href="Publications/CADE2021_Impact.pdf" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-pdf"></i> PDF</a>
+                <a class="pub-link" href="https://ieeexplore.ieee.org/document/9946036" target="_blank" rel="noopener noreferrer"><i class="fas fa-link"></i> DOI</a>
+                <a class="pub-link" href="images/best_paper_CADE.pdf" target="_blank" rel="noopener noreferrer"><i class="fas fa-award"></i> Certificate</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="pub-item">
+            <div class="pub-year">2022</div>
+            <div class="pub-title">&ldquo;Tight Differential Privacy Blanket for Shuffle Model&rdquo;</div>
+            <div class="pub-authors"><span class="me">Sayan Biswas</span>, Kangsoo Jung, Catuscia Palamidessi</div>
+            <div class="pub-venue">Competitive Advantage in the Digital Economy (CADE) 2022</div>
+            <div class="pub-footer">
+              <div class="pub-links">
+                <a class="pub-link" href="Publications/CADE21_TightDP.pdf" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-pdf"></i> PDF</a>
+                <a class="pub-link" href="https://ieeexplore.ieee.org/document/9946042" target="_blank" rel="noopener noreferrer"><i class="fas fa-link"></i> DOI</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="pub-item">
+            <div class="pub-year">2021</div>
+            <div class="pub-title">&ldquo;An Incentive Mechanism for Trading Personal Data in Data Markets&rdquo;</div>
+            <div class="pub-authors"><span class="me">Sayan Biswas</span>, Kangsoo Jung, Catuscia Palamidessi</div>
+            <div class="pub-venue">International Colloquium on Theoretical Aspects of Computing (ICTAC) 2021</div>
+            <div class="pub-footer">
+              <div class="pub-links">
+                <a class="pub-link" href="Publications/ictac21.pdf" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-pdf"></i> PDF</a>
+                <a class="pub-link" href="https://link.springer.com/chapter/10.1007%2F978-3-030-85315-0_12" target="_blank" rel="noopener noreferrer"><i class="fas fa-link"></i> DOI</a>
+              </div>
+            </div>
+          </div>
+
         </div>
-      </div>      
       </div>
 
-</div>
-</body>
+      <!-- Journals -->
+      <div class="pub-category">
+        <div class="pub-category-label">Journals</div>
+        <div class="pub-list">
 
+          <div class="pub-item">
+            <div class="pub-year">2024</div>
+            <div class="pub-title">&ldquo;A Privacy-Preserving Querying Mechanism with High Utility for Electric Vehicles&rdquo;</div>
+            <div class="pub-authors">Ugur Ilker Atmaca, <span class="me">Sayan Biswas</span>, Carsten Maple, Catuscia Palamidessi</div>
+            <div class="pub-venue">IEEE Open Journal of Vehicular Technology, Volume 5, pp 262&ndash;277</div>
+            <div class="pub-footer">
+              <div class="pub-links">
+                <a class="pub-link" href="Publications/OJVT24.pdf" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-pdf"></i> PDF</a>
+                <a class="pub-link" href="https://ieeexplore.ieee.org/document/10416404" target="_blank" rel="noopener noreferrer"><i class="fas fa-link"></i> DOI</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="pub-item">
+            <div class="pub-year">2023</div>
+            <div class="pub-title">&ldquo;Advancing Personalized Federated Learning: Group Privacy, Fairness, and Beyond&rdquo;</div>
+            <div class="pub-authors">Filippo Galli, Kangsoo Jung, <span class="me">Sayan Biswas</span>, Catuscia Palamidessi, Tommaso Cucinotta</div>
+            <div class="pub-venue">Springer Nature Computer Science, Volume 4, Issue 6, Article 831 (2023)</div>
+            <div class="pub-footer">
+              <div class="pub-links">
+                <a class="pub-link" href="Publications/sncs23.pdf" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-pdf"></i> PDF</a>
+                <a class="pub-link" href="https://doi.org/10.1007/s42979-023-02292-0" target="_blank" rel="noopener noreferrer"><i class="fas fa-link"></i> DOI</a>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Book sections -->
+      <div class="pub-category">
+        <div class="pub-category-label">Book Sections</div>
+        <div class="pub-list">
+
+          <div class="pub-item">
+            <div class="pub-year">2021</div>
+            <div class="pub-title">&ldquo;Establishing the Price of Privacy in Federated Data Trading&rdquo;</div>
+            <div class="pub-authors">Kangsoo Jung, <span class="me">Sayan Biswas</span>, Catuscia Palamidessi</div>
+            <div class="pub-venue">Protocols, Strands, and Logic, pp 232&ndash;250, LNCS 13066, Springer</div>
+            <div class="pub-footer">
+              <div class="pub-links">
+                <a class="pub-link" href="Publications/FestschriftJoshua21.pdf" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-pdf"></i> PDF</a>
+                <a class="pub-link" href="https://link.springer.com/chapter/10.1007/978-3-030-91631-2_13" target="_blank" rel="noopener noreferrer"><i class="fas fa-link"></i> DOI</a>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Non-archival workshops -->
+      <div class="pub-category">
+        <div class="pub-category-label">Non-archival Workshops</div>
+        <div class="pub-list">
+
+          <div class="pub-item">
+            <div class="pub-year">2024</div>
+            <div class="pub-title">&ldquo;Bayes&rsquo; capacity as a measure for reconstruction attacks in federated learning&rdquo;</div>
+            <div class="pub-authors"><span class="me">Sayan Biswas</span>, Mark Dras, Pedro Faustini, Natasha Fernandes, Annabelle McIver, Catuscia Palamidessi, Parastoo Sadeghi</div>
+            <div class="pub-venue">
+              <a href="https://protectitworkshop.github.io/protectit-workshop.github.io/" target="_blank" rel="noopener noreferrer">Workshop on Security, Privacy, and Information Theory (Protect-IT) @ IEEE CSF 2024</a>
+              &mdash; July 8, 2024; Enschede, The Netherlands
+            </div>
+            <div class="pub-footer">
+              <div class="pub-links">
+                <a class="pub-link" href="https://arxiv.org/abs/2406.13569v1" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-pdf"></i> Paper</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="pub-item">
+            <div class="pub-year">2023</div>
+            <div class="pub-title">&ldquo;PRIVIC: A privacy-preserving method for incremental collection of location data&rdquo;</div>
+            <div class="pub-authors"><span class="me">Sayan Biswas</span>, Catuscia Palamidessi</div>
+            <div class="pub-venue">
+              <a href="https://tpdp.journalprivacyconfidentiality.org/2023/" target="_blank" rel="noopener noreferrer">Theory and Practice of Differential Privacy (TPDP) 2023</a>
+              &mdash; September 27&ndash;28, 2023; Boston, USA
+            </div>
+          </div>
+
+          <div class="pub-item">
+            <div class="pub-year">2023</div>
+            <div class="pub-title">&ldquo;On the adaptive sensitivity of differentially private machine learning&rdquo;</div>
+            <div class="pub-authors">Filippo Galli, <span class="me">Sayan Biswas</span>, Kangsoo Jung, Tommaso Cucinotta, Catuscia Palamidessi</div>
+            <div class="pub-venue">
+              <a href="https://aaai-ppai23.github.io/" target="_blank" rel="noopener noreferrer">4th Workshop on Privacy-Preserving AI (PPAI) @ AAAI 2023</a>
+              &mdash; February 13, 2023; Washington DC, USA
+            </div>
+          </div>
+
+          <div class="pub-item">
+            <div class="pub-year">2022</div>
+            <div class="pub-title">&ldquo;Group privacy for Personalized Federated Learning&rdquo;</div>
+            <div class="pub-authors">Filippo Galli, <span class="me">Sayan Biswas</span>, Kangsoo Jung, Tommaso Cucinotta, Catuscia Palamidessi</div>
+            <div class="pub-venue">
+              <a href="https://federated-learning.org/fl-neurips-2022/" target="_blank" rel="noopener noreferrer">International Workshop on Federated Learning (FL-NeurIPS) @ NeurIPS 2022</a>
+              &mdash; December 2, 2022; New Orleans, USA
+            </div>
+            <div class="pub-footer">
+              <span class="badge badge-oral">&#9679; Oral &mdash; 12 of 103 submissions</span>
+              <div class="pub-links">
+                <a class="pub-link" href="https://openreview.net/forum?id=R45g30SnwsR" target="_blank" rel="noopener noreferrer"><i class="fas fa-link"></i> Paper</a>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ── News & Updates ── -->
+    <section class="section" id="news">
+      <h2 class="section-title">News &amp; Updates</h2>
+      <div class="news-list">
+
+        <div class="news-item">
+          <div class="news-date">Oct&nbsp;&rsquo;23</div>
+          <div class="news-body">Moving to Lausanne, Switzerland to start as a Postdoctoral Researcher at the
+            <a href="https://www.epfl.ch/labs/sacs/" target="_blank" rel="noopener noreferrer">SaCS lab</a> at
+            <a href="https://www.epfl.ch/en/" target="_blank" rel="noopener noreferrer">EPFL</a>, supervised by
+            <a href="https://people.epfl.ch/anne-marie.kermarrec/?lang=en" target="_blank" rel="noopener noreferrer">Anne-Marie Kermarrec</a>,
+            working on privacy-preserving decentralised models.
+          </div>
+        </div>
+
+        <div class="news-item">
+          <div class="news-date">Oct&nbsp;&rsquo;23</div>
+          <div class="news-body">Successfully defended my PhD thesis
+            <em>&ldquo;Understanding and optimizing the trade-off between privacy and utility from a foundational perspective&rdquo;</em>
+            &mdash; awarded the title of Doctor of Computer Science from
+            <a href="https://www.polytechnique.edu/en" target="_blank" rel="noopener noreferrer">&Eacute;cole Polytechnique</a> and
+            <a href="https://www.ip-paris.fr/en" target="_blank" rel="noopener noreferrer">Institut Polytechnique de Paris</a>!<br>
+            <a class="news-photo" href="images/PhD.png" target="_blank" rel="noopener noreferrer">
+              <i class="fas fa-camera"></i> Photo ft. the official moment of change from &ldquo;Mr.&rdquo; to &ldquo;Dr.&rdquo;
+            </a>
+          </div>
+        </div>
+
+        <div class="news-item">
+          <div class="news-date">Sep&nbsp;&rsquo;23</div>
+          <div class="news-body">Visiting
+            <a href="https://researchers.mq.edu.au/en/persons/annabelle-mciver" target="_blank" rel="noopener noreferrer">Annabelle McIver</a> and
+            <a href="https://researchers.mq.edu.au/en/persons/natasha-fernandes" target="_blank" rel="noopener noreferrer">Natasha Fernandes</a> at
+            <a href="https://www.mq.edu.au/" target="_blank" rel="noopener noreferrer">Macquarie University</a>, Sydney,
+            studying information leakage from differentially private mechanisms and doing lots of fun maths!
+          </div>
+        </div>
+
+        <div class="news-item">
+          <div class="news-date">Aug&nbsp;&rsquo;23</div>
+          <div class="news-body">Paper
+            <a href="https://arxiv.org/abs/2206.10525" target="_blank" rel="noopener noreferrer"><em>&ldquo;PRIVIC: A privacy-preserving method for incremental collection of location data&rdquo;</em></a>
+            selected for presentation at
+            <a href="https://tpdp.journalprivacyconfidentiality.org/2023/" target="_blank" rel="noopener noreferrer">TPDP 2023</a>
+            in Boston, USA (September 27&ndash;28, 2023).
+          </div>
+        </div>
+
+        <div class="news-item">
+          <div class="news-date">Aug&nbsp;&rsquo;23</div>
+          <div class="news-body">Paper
+            <a href="https://arxiv.org/abs/2206.10525" target="_blank" rel="noopener noreferrer"><em>&ldquo;PRIVIC&rdquo;</em></a>
+            accepted for publication at the
+            <a href="https://petsymposium.org/index.php" target="_blank" rel="noopener noreferrer">24th Privacy Enhancing Technologies Symposium (PETS 2024)</a>,
+            Bristol, UK, July 2024.
+          </div>
+        </div>
+
+        <div class="news-item">
+          <div class="news-date">Jul&nbsp;&rsquo;23</div>
+          <div class="news-body">Presented ongoing work
+            <em>&ldquo;Characterizing the information leakage from gradient updates in federated learning&rdquo;</em>
+            at the <a href="https://project.inria.fr/fedmalin/" target="_blank" rel="noopener noreferrer">FedMalin</a> seminar
+            (online, July 10, 2023).<br>
+            <a class="news-photo" href="images/Fedmalin.png" target="_blank" rel="noopener noreferrer">
+              <i class="fas fa-camera"></i> Photo illustrating: &ldquo;When someone asks a question during your talk, first have some tea.&rdquo;
+            </a>
+          </div>
+        </div>
+
+        <div class="news-item">
+          <div class="news-date">Feb&nbsp;&rsquo;23</div>
+          <div class="news-body">Presented position paper
+            <em>&ldquo;On the adaptive sensitivity of differentially private machine learning&rdquo;</em>
+            at the <a href="https://aaai-ppai23.github.io/" target="_blank" rel="noopener noreferrer">4th AAAI Workshop on Privacy-Preserving AI (PPAI-23)</a>,
+            Washington DC, USA.
+          </div>
+        </div>
+
+        <div class="news-item">
+          <div class="news-date">Dec&nbsp;&rsquo;22</div>
+          <div class="news-body">Presented
+            <em>&ldquo;Group privacy for personalized federated learning&rdquo;</em>
+            at <a href="https://federated-learning.org/fl-neurips-2022/" target="_blank" rel="noopener noreferrer">FL-NeurIPS 2022</a>,
+            New Orleans, USA.
+          </div>
+        </div>
+
+        <div class="news-item">
+          <div class="news-date">Nov&nbsp;&rsquo;22</div>
+          <div class="news-body">Presented
+            <em>&ldquo;Group privacy for personalized federated learning&rdquo;</em>
+            at the Privacy Preserving Machine Learning (PPML) Workshop at
+            <a href="https://www.metacareers.com/v2/locations/paris/?p[offices][0]=Paris%2C%20France&offices[0]=Paris%2C%20France" target="_blank" rel="noopener noreferrer">Meta, Paris</a>
+            (November 9, 2022).<br>
+            <a class="news-photo" href="images/metaPPML.jpeg" target="_blank" rel="noopener noreferrer">
+              <i class="fas fa-camera"></i> Photo ft. three of the five co-authors who struggle to pose elegantly.
+            </a>
+          </div>
+        </div>
+
+        <div class="news-item">
+          <div class="news-date">Oct&nbsp;&rsquo;22</div>
+          <div class="news-body">Talk on
+            <em>&ldquo;A privacy-preserving method for incremental collection of location data: Differential Privacy and beyond&rdquo;</em>
+            at the <a href="https://project.inria.fr/FranceJapanICST/about-the-7th-franco-japanese-cybersecurity-workshop-october-24-26/" target="_blank" rel="noopener noreferrer">7th Franco-Japanese Cybersecurity Workshop</a>,
+            Tokyo, Japan (October 24, 2022).<br>
+            <a class="news-photo" href="images/talk.jpeg" target="_blank" rel="noopener noreferrer">
+              <i class="fas fa-camera"></i> Photo ft. an underslept, overtravelled, and perpetually excited Sayan.
+            </a>
+          </div>
+        </div>
+
+        <div class="news-item">
+          <div class="news-date">Aug&nbsp;&rsquo;22</div>
+          <div class="news-body">Designed and delivered a hands-on session on differential privacy with federated learning at
+            <a href="https://idessai.eu/" target="_blank" rel="noopener noreferrer">IDESSAI 2022</a>,
+            Saarbr&uuml;cken, Germany (August 29 &ndash; September 2, 2022).<br>
+            <a class="news-photo" href="images/likedtalk.jpeg" target="_blank" rel="noopener noreferrer">
+              <i class="fas fa-camera"></i> The course received a special mention as the most liked course in the summer school. :)
+            </a>
+          </div>
+        </div>
+
+        <div class="news-item">
+          <div class="news-date">Aug&nbsp;&rsquo;22</div>
+          <div class="news-body">Won the <strong>Best Paper Award</strong> for
+            <em>&ldquo;Impact of Sampling on Locally Differentially Private Data Collection&rdquo;</em>
+            at <a href="https://ieeexplore.ieee.org/xpl/conhome/9945911/proceeding" target="_blank" rel="noopener noreferrer">CADE 2022</a>,
+            Venice, Italy (June 13&ndash;15, 2022).<br>
+            <a class="news-photo" href="images/best_paper_CADE.pdf" target="_blank" rel="noopener noreferrer">
+              <i class="fas fa-award"></i> Award certificate.
+            </a>
+          </div>
+        </div>
+
+        <div class="news-item">
+          <div class="news-date">Jun&nbsp;&rsquo;22</div>
+          <div class="news-body">Presented ongoing work on
+            <em>&ldquo;Three-way optimization of privacy and utility of location data&rdquo;</em>
+            at <a href="https://apvp2022.sciencesconf.org/" target="_blank" rel="noopener noreferrer">APVP 2022</a>,
+            Chatenay sur Seine, France (June 15, 2022).<br>
+            <a class="news-photo" href="images/APVP.jpeg" target="_blank" rel="noopener noreferrer">
+              <i class="fas fa-camera"></i> Photo ft. the most Baroque setting and the most non-Baroque outfit.
+            </a>
+          </div>
+        </div>
+
+        <div class="news-item">
+          <div class="news-date">Jun&nbsp;&rsquo;22</div>
+          <div class="news-body">Presented
+            <em>&ldquo;Impact of Sampling on Locally Differentially Private Data Collection&rdquo;</em>
+            at <a href="https://ieeexplore.ieee.org/xpl/conhome/9945911/proceeding" target="_blank" rel="noopener noreferrer">CADE 2022</a>,
+            Venice, Italy (June 13&ndash;15, 2022).<br>
+            <a class="news-photo" href="images/CADE.jpeg" target="_blank" rel="noopener noreferrer">
+              <i class="fas fa-camera"></i> Photo ft. an elated Sayan explaining differential privacy to the crowd.
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+  <!-- ══════════════ End Main ══════════════ -->
+
+</div>
+
+<script>
+  /* Mobile menu */
+  function toggleMobileMenu() {
+    document.getElementById('mobileMenu').classList.toggle('open');
+  }
+  function closeMobileMenu() {
+    document.getElementById('mobileMenu').classList.remove('open');
+  }
+  document.addEventListener('click', function (e) {
+    const menu = document.getElementById('mobileMenu');
+    const header = document.querySelector('.mobile-header');
+    if (header && !header.contains(e.target) && !menu.contains(e.target)) {
+      menu.classList.remove('open');
+    }
+  });
+
+  /* Active section highlight in sidebar nav */
+  (function () {
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.sidebar-nav a[href^="#"]');
+    if (!sections.length || !navLinks.length) return;
+
+    function updateActive() {
+      const scrollY = window.scrollY + 100;
+      let current = sections[0].id;
+      sections.forEach(function (s) {
+        if (scrollY >= s.offsetTop) current = s.id;
+      });
+      navLinks.forEach(function (a) {
+        a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+      });
+    }
+
+    window.addEventListener('scroll', updateActive, { passive: true });
+    updateActive();
+  })();
+</script>
+
+</body>
 </html>
